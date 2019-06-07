@@ -2,6 +2,22 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+
+void swap(int *num1, int *num2)
+{
+   int temp = *num1;
+   *num1 = *num2;
+   *num2 = temp;
+}
+
+void print(int array[], int size)
+{
+   int i;
+   for (i = 0; i < size; i++)
+      printf("%d  ", array[i]);
+   printf("\n");
+}
+
 void Bubble_Sort(int array[], int size)
 {
    int i, j;
@@ -39,30 +55,71 @@ void Insertion_Sort(int array[], int size)
 
 void Selection_Sort(int array[], int size)
 {
-   int i, j,min;
+   int i, j, min;
 
    for (i = 0; i < size - 1; i++)
-   {     min = i;
-      for (j =i+1; j < size; j++)
+   {
+      min = i;
+      for (j = i + 1; j < size; j++)
       {
          if (array[min] > array[j])
          {
-           min = j ;
+            min = j;
          }
       }
-            int temp =array[min];
-            array[min] = array[i]; 
-            array[i] = temp;
+      int temp = array[min];
+      array[min] = array[i];
+      array[i] = temp;
    }
 }
 
-
-void print(int array[], int size)
+void heapsort(int array[], int size)
 {
-   int i;
-   for (i = 0; i < size; i++)
-      printf("%d  ", array[i]);
-   printf("\n");
+   int l = size / 2;
+
+   if (size % 2 == 0)
+   {
+      l = size / 2 - 1;
+   }
+
+   int r = size - 1;
+   int j, k;
+
+   while (r >= 1)
+   {
+      if (l > 0)
+      {
+         l--;
+         j = l;
+      }
+      else
+      {
+         swap(&array[0], &array[r]);
+         r--;
+         j = 0;
+      }
+      int s = array[j];
+
+      while (2 * j <= r)
+      {
+         k = 2 * j;
+         if (k < r && array[k] < array[k + 1])
+         {
+
+            k++;
+         }
+         if (s < array[k])
+         {
+            swap(&array[j], &array[k]);
+            j = k;
+         }
+         else
+         {
+
+            break;
+         }
+      }
+   }
 }
 
 int main()
@@ -89,7 +146,7 @@ int main()
    printf("Total time of Bubble Sort execution is %lf\n", time);
 
    memcpy(temp, array, sizeof(array));
-  
+
    //=============Insertion Sort======================
    start = clock();
    Insertion_Sort(temp, size);
@@ -98,13 +155,22 @@ int main()
    printf("Total time of Insertion Sort execution is %lf\n", time);
 
    memcpy(temp, array, sizeof(array));
-   
+
    //=============Selection Sort======================
    start = clock();
    Selection_Sort(temp, size);
    end = clock();
    time = ((double)(end - start)) / CLK_TCK;
    printf("Total time of Insertion Sort execution is %lf\n", time);
+
+   memcpy(temp, array, sizeof(array));
+
+   //============== HeapSort ===========================
+   start = clock();
+   heapsort(temp, size);
+   end = clock();
+   time = ((double)(end - start)) / CLK_TCK;
+   printf("Total time of HeapSort execution is %lf\n", time);
 
    return 0;
 }
