@@ -1,227 +1,252 @@
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
-#define bufSize 1024
-#define MAX 20
+#include <math.h>
 
-struct Student
-{
-    char am[20];
-    char name[20];
-    char sname[20];
-    float bathmos;
-};
+int linearSearch (int list[], int l, int r, int key) {
 
-struct Record
-{
-    struct Student data;
-    struct Record *link;
-};
+    int found = 0, i = l;
 
-void readFile(struct Student array[]);
+    while (!found && i < r) {
 
-void insert(struct Student person, struct Record *hash_array[]);
-int search_element(char key [], struct Record *hash_array[]);
-void remove_record(char key [], struct Record *hash_array[]);
-void show(struct Record *hash_array[]);
-int hash_function(char key []);
+        if (list[i] == key) return i;
 
-int main()
-{
-    struct Record *hash_array[20];
-    struct Student array[20];
-    int count, option;
-    char key[20];
-    
-    readFile(array);
-  
-
-    while (1)
-    {
-        printf("2. Search for a Record\n");
-        printf("3. Delete a Record\n");
-        printf("4. Show Hash Table\n");
-        printf("5. Quit\n");
-        printf("Enter your option\n");
-        scanf("%d", &option);
-        switch (option)
-        {
-        case 1:
-
-            break;
-        case 2:
-            printf("Enter the element to search:\t");
-            scanf("%s", &key);
-            count = search_element(key, hash_array);
-            if (count == -1)
-            {
-                printf("Element Not Found\n");
-            }
-            else
-            {
-                printf("Element Found in Chain:\t%d\n", count);
-            }
-            break;
-        case 3:
-            printf("Enter the element to delete:\t");
-            scanf("%s", &key);
-            remove_record(key, hash_array);
-            break;
-        case 4:
-            show(hash_array);
-            break;
-        case 5:
-            exit(1);
-        }
-    }
-    return 0;
-}
-void readFile(struct Student array[])
-{
-
-    FILE *fp;
-    char buf[bufSize];
-
-    if ((fp = fopen("test.txt", "r")) == NULL)
-    {
-        printf("Error! opening file");
-        exit(1);
-    }
-
-    char buff[256];
-    int i = 0;
-
-    for (i = 0; fgets(buff, sizeof(buff), fp) != NULL; i++)
-    {
-        char *pch;
-        pch = strtok(buff, " ,-");
-        int j = 0;
-        while (pch != NULL)
-        {
-            if (j == 0)
-            {
-                memcpy(array[i].am, pch, sizeof(pch) * 8);
-                //printf(" %d,%d: %s\n", i, j, array[i].am);
-            }
-            else if (j == 1)
-            {
-                memcpy(array[i].name, pch, sizeof(pch) * 8);
-                //printf(" %d,%d: %s\n", i, j, array[i].name);
-            }
-            else if (j == 2)
-            {
-
-                memcpy(array[i].sname, pch, sizeof(pch) * 8);
-                // printf(" %d,%d: %s\n", i, j, array[i].sname);
-            }
-            else if (j == 3)
-            {
-                array[i].bathmos = atof(pch);
-                //printf(" %d,%d: %.02lf\n", i, j, array[i].bathmos);
-
-                j = 0;
-            }
-            j++;
-            pch = strtok(NULL, " ,-");
-        }
-    }
-
-    fclose(fp);
-}
-
-void insert(struct Student person, struct Record *hash_array[])
-{
-    int h;
-    char key[256];
-    struct Record *temp;
-    strcpy(key, person.am);
-    if (search_element(key, hash_array) != -1)
-    {
-        printf("Duplicate Key\n");
-        return;
-    }
-    h = hash_function(key);
-    temp = malloc(sizeof(struct Record));
-    temp->data = person;
-    temp->link = hash_array[h];
-    hash_array[h] = temp;
-}
-
-void show(struct Record *hash_array[])
-{
-    int count;
-    struct Record *ptr;
-    for (count = 0; count < MAX; count++)
-    {
-        printf("\n[%3d]", count);
-        if (hash_array[count] != NULL)
-        {
-            ptr = hash_array[count];
-            while (ptr != NULL)
-            {
-                printf("%s %s %f\t", ptr->data.am, ptr->data.name, ptr->data.bathmos);
-                ptr = ptr->link;
-            }
-        }
-    }
-    printf("\n");
-}
-
-int search_element(char key[], struct Record *hash_array[])
-{
-    int h;
-    struct Record *ptr;
-    h = hash_function(key);
-    ptr = hash_array[h];
-    while (ptr != NULL)
-    {
-        if (ptr->data.am == key)
-        {
-            return h;
-        }
-        ptr = ptr->link;
+        ++i;
     }
     return -1;
 }
 
-void remove_record(char key [], struct Record *hash_array[])
+
+void Binary_Search(int array[], int size, int key)
 {
-    int h;
-    struct Record *temp, *ptr;
-    h = hash_function(key);
-    if (hash_array[h] == NULL)
+    int bottom = 0, top = size - 1;
+    while (bottom <= top)
     {
-        printf("Key %s Not Found\n", key);
-        return;
-    }
-    if (strcmp(hash_array[h]->data.am,key)==0)
-    {
-        temp = hash_array[h];
-        hash_array[h] = hash_array[h]->link;
-        free(temp);
-        return;
-    }
-    ptr = hash_array[h];
-    while (ptr->link != NULL)
-    {
-        if (strcmp(ptr->link->data.am , key)==0)
+        int mid = (top + bottom) / 2;
+        if (array[mid] == key)
         {
-            temp = ptr->link;
-            ptr->link = temp->link;
-            free(temp);
+            printf("To stoixeio %d vrethike sthn thesi %d \n", key, mid);
             return;
         }
-        ptr = ptr->link;
+        else if (array[mid] > key)
+        {
+            top = mid - 1;
+        }
+        else
+        {
+            bottom = mid + 1;
+        }
     }
-    printf("Key %d Not Found\n", key);
+    printf("O xarakthras %d den vrethike", key);
 }
 
-int hash_function(char key[])
+void Interpolation_Search(int array[], int size, int key)
 {
-    int i, num = 0;
-    for (i = 0; i < 8 ; i++)
-    
-            num = num + (int)key[i];
-    
-    return num;
+    int low = 0, high = size - 1;
+    while (array[high] >= key && key > array[low])
+    {
+        int next = low + ((key - array[low]) / (array[high] - array[low])) * (high - low);
+        if (key > array[next])
+        {
+            low = next + 1;
+        }
+        else if (key < array[next])
+        {
+            high = next - 1;
+        }
+        else
+        {
+            low = next;
+        }
+
+        if (key == array[low])
+        {
+            printf("To stoixeio %d vrethke sthn thesi %d", key, low);
+            return;
+        }
+    }
+    printf("To stoixeio den vrethike !");
+}
+
+
+//========================== BIS ===================================
+void search(int array[], int size, int key, int next)
+{
+    int i;
+    printf("%d \n", next);
+
+    for (i = 1; i <= 3; i++)
+    {
+        if (array[next + i] == key && next >= -3)
+        {
+            printf("To stoixeio %d vrethike sthn thesi %d", key, next + i);
+            return;
+        }
+    }
+
+    printf("To stoixeio den vrethike !");
+}
+
+void Binary_Interpolation_Search(int array[], int n, int key)
+{
+
+    int left = 0, right = n - 1, x;
+    int size = right - left + 1;
+    int next = 1 + ((key - array[left]) / (array[right] - array[left])) * size;
+    int sqrtsize = sqrt(size);
+
+    if (array[0] == key)
+    {
+        printf("To stoixeio %d vrethike sthn thesi %d", key, 0);
+        return;
+    }
+
+    while (key != array[next])
+    {
+        int i = 0;
+        size = right - left;
+        sqrtsize = sqrt(size);
+        if (size <= 3)
+        {
+            search(array, size, key, next);
+            return;
+        }
+
+        if (key >= array[next])
+        {
+
+            while (key > array[next + (i * sqrtsize) - 1])
+            {
+                i++;
+            }
+            right = next + i * sqrt(size);
+            left = next + (i - 1) * sqrt(size);
+        }
+        else if (key < array[next])
+        {
+
+            while (key < array[next - (i * sqrtsize) + 1])
+            {
+                i++;
+            }
+            right = next - (i - 1) * sqrt(size);
+            left = next - i * sqrt(size);
+        }
+
+        next = left + ((right - left) * (key - array[left]) / (array[right] - array[left])) - 1;
+    }
+    if (key == array[next])
+    {
+        printf("To stoixeio %d vrethike sthn thesi %d", key, next);
+        return;
+    }
+
+    printf("To stoixeio den vrethike !");
+}
+
+ int bisSearch (int arr[], int l, int r, int key)  {
+    int left    = l;
+    int right   = r;
+    int size = right - left;
+    int next = (int) (size * ((key - arr[left])/(arr[right] - arr[left]))) + 1;
+
+    while (key != arr[next]) {
+        int i = 0;
+        size = right - left;
+
+        if (size <= 3){
+            return linearSearch (arr, l, r, key);
+
+        }
+
+
+
+        if (key >= arr[next]) {
+
+            while (key > arr[next + i*((int) sqrt(size)) - 1]) {
+                ++i;
+            }
+
+            right = next + (int) (i*sqrt(size));
+
+            left  = next + (int) ((i-1)*sqrt(size));
+
+        }
+
+        else if (key < arr[next]) {
+
+            while (key < arr[next -i* ((int) sqrt(size)) + 1]) {
+
+                ++i;
+
+            }
+
+            right = next - (int) ((i-1)*sqrt(size));
+
+            left  = next - (int) (i*sqrt(size));
+
+        }
+
+        next = (int) (left + ((right - left +1)*(key - arr[left])/(arr[right] - arr[left]))) - 1;
+
+
+
+    }
+
+    if (key = arr[next])
+
+            return next;
+
+        else return -1;
+
+}
+
+void Insertion_Sort(int array[], int size)
+{
+    int i, j;
+
+    for (i = 1; i < size; i++)
+    {
+        int x = array[i];
+        int j = i - 1;
+        while (j >= 0 && x < array[j])
+        {
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = x;
+    }
+}
+
+//===================================================================================================
+int main()
+{
+    int size = 10000, array[size],index=0;
+    int srchsize = 4000;
+
+    int i,srch[srchsize];
+    for (i = 0; i < size; i++)
+    {
+        array[i] = rand() % 500 + 1;
+
+    }
+
+    for (i = 0; i < srchsize-1; i++)
+    {
+        srch[i] = rand() % 40 + 1;
+
+    }
+    Insertion_Sort(array,size);
+
+    int x =0;
+     for(i=0; i<srchsize-1; i++){
+        int x = srch[i];
+        index = bisSearch(array,0,size,x);
+        if(index!= -1 )
+            printf("vrethike ");
+        else
+            printf("Nope");}
+
+    return 0;
 }

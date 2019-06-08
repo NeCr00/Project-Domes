@@ -196,13 +196,13 @@ int main()
 {
     //=============================================
     // dhmiourgia pinaka kai tou antigrafou
-    int array[5000], size = 5000;
+    int size = 10000, array[size];
     int i;
     for (i = 0; i < size; i++)
     {
         array[i] = rand() % 1000 + 1;
     }
-    int temp[5000];
+    int temp[size];
     memcpy(temp, array, sizeof(array));
     //=============================================
     double time;
@@ -243,7 +243,7 @@ int main()
     mergesort(temp, 0, size - 1);
     end = clock();
     time = ((double)(end - start)) / CLK_TCK;
-    printf("Total time of Merge Sort execution is %.15lf\n", time);
+    printf("Total time of Merge Sort execution is %lf\n", time);
     //========================================================
 
     memcpy(temp, array, sizeof(array));
@@ -253,7 +253,7 @@ int main()
     QuickSort(temp, 0, size - 1);
     end = clock();
     time = ((double)(end - start)) / CLK_TCK;
-    printf("Total time of Quick Sort execution is %.15lf\n", time);
+    printf("Total time of Quick Sort execution is %lf\n", time);
     //=========================================================
 
     memcpy(temp, array, sizeof(array));

@@ -4,26 +4,17 @@
 #include <string.h>
 #include <math.h>
 
-void linsearch(int array[], int x, int n)
-{
+int linearSearch (int array[], int l, int r, int key) {
 
-    int i;
+    int found = 0, i = l;
 
-    i = 0;
-    while (i < n)
-    {
-        if (array[i] == x)
-        {
-            printf("o xarakthras %d vrisketai sth thesh %d", x, i);
-            break;
-        }
-        else
-            i = i + 1;
+    while (!found && i < r) {
+
+        if (array[i] == key) return i;
+
+        ++i;
     }
-    if (i >= n)
-    {
-        printf("to stoixeio den vrethike");
-    }
+    return -1;
 }
 
 void Binary_Search(int array[], int size, int key)
@@ -34,7 +25,7 @@ void Binary_Search(int array[], int size, int key)
         int mid = (top + bottom) / 2;
         if (array[mid] == key)
         {
-            printf("To stoixeio %d vrethike sthn thesi %d \n", key, mid);
+            //printf("To stoixeio %d vrethike sthn thesi %d \n", key, mid);
             return;
         }
         else if (array[mid] > key)
@@ -46,7 +37,7 @@ void Binary_Search(int array[], int size, int key)
             bottom = mid + 1;
         }
     }
-    printf("O xarakthras %d den vrethike", key);
+    //printf("O xarakthras %d den vrethike", key);
 }
 
 void Interpolation_Search(int array[], int size, int key)
@@ -70,11 +61,11 @@ void Interpolation_Search(int array[], int size, int key)
 
         if (key == array[low])
         {
-            printf("To stoixeio %d vrethke sthn thesi %d", key, low);
+            //printf("To stoixeio %d vrethke sthn thesi %d", key, low);
             return;
         }
     }
-    printf("To stoixeio den vrethike !");
+    //printf("To stoixeio den vrethike !");
 }
 
 
@@ -88,78 +79,230 @@ void search(int array[], int size, int key, int next)
     {
         if (array[next + i] == key && next >= -3)
         {
-            printf("To stoixeio %d vrethike sthn thesi %d", key, next + i);
+            //printf("To stoixeio %d vrethike sthn thesi %d", key, next + i);
             return;
         }
     }
 
-    printf("To stoixeio den vrethike !");
+    //printf("To stoixeio den vrethike !");
 }
 
-void Binary_Interpolation_Search(int array[], int n, int key)
-{
+ int bisSearch2 (int arr[], int l, int r, int key)  {
+    int left    = l;
+    int right   = r;
+    int size = right - left;
+    int next = (int) (size * ((key - arr[left])/(arr[right] - arr[left]))) + 1;
+    int index = 0, n = r;
 
-    int left = 0, right = n - 1, x;
-    int size = right - left + 1;
-    int next = 1 + ((key - array[left]) / (array[right] - array[left])) * size;
-    int sqrtsize = sqrt(size);
+    while (key != arr[next]) {
+        int i = 1;
+        size = right - left;
 
-    if (array[0] == key)
-    {
-        printf("To stoixeio %d vrethike sthn thesi %d", key, 0);
-        return;
+        if (size <= 3){
+            return linearSearch (arr, l, r, key);
+
+        }
+
+
+
+        if (key >= arr[next]) {
+
+            while (key > arr[next + i*((int) sqrt(size)) - 1]) {
+                i= i*2;
+            }
+
+            right = next + (int) (i*sqrt(size));
+
+            left  = next + (int) ((i-1)*sqrt(size));
+
+        }
+
+        else if (key < arr[next]) {
+
+            while (key < arr[next -i* ((int) sqrt(size)) + 1]) {
+
+                i=i*2;
+
+            }
+
+            right = next - (int) ((i-1)*sqrt(size));
+
+            left  = next - (int) (i*sqrt(size));
+
+        }
+
+        next = (int) (left + ((right - left +1)*(key - arr[left])/(arr[right] - arr[left]))) - 1;
+
+        index++;
+
+        if(index >n)
+            break;
+
     }
 
-    while (key != array[next])
-    {
+    if (key = arr[next])
+
+            return next;
+
+        else return -1;
+
+}
+
+
+
+  int bisSearch1 (int arr[], int l, int r, int key)  {
+    int left    = l;
+    int right   = r;
+    int size = right - left;
+    int next = (int) (size * ((key - arr[left])/(arr[right] - arr[left]))) + 1;
+
+    while (key != arr[next]) {
         int i = 0;
         size = right - left;
-        sqrtsize = sqrt(size);
-        if (size <= 3)
-        {
-            search(array, size, key, next);
-            return;
+
+        if (size <= 3){
+            return linearSearch (arr, l, r, key);
+
         }
 
-        if (key >= array[next])
-        {
 
-            while (key > array[next + (i * sqrtsize) - 1])
-            {
-                i++;
+
+        if (key >= arr[next]) {
+
+            while (key > arr[next + i*((int) sqrt(size)) - 1]) {
+                ++i;
             }
-            right = next + i * sqrt(size);
-            left = next + (i - 1) * sqrt(size);
-        }
-        else if (key < array[next])
-        {
 
-            while (key < array[next - (i * sqrtsize) + 1])
-            {
-                i++;
+            right = next + (int) (i*sqrt(size));
+
+            left  = next + (int) ((i-1)*sqrt(size));
+
+        }
+
+        else if (key < arr[next]) {
+
+            while (key < arr[next -i* ((int) sqrt(size)) + 1]) {
+
+                ++i;
+
             }
-            right = next - (i - 1) * sqrt(size);
-            left = next - i * sqrt(size);
+
+            right = next - (int) ((i-1)*sqrt(size));
+
+            left  = next - (int) (i*sqrt(size));
+
         }
 
-        next = left + ((right - left) * (key - array[left]) / (array[right] - array[left])) - 1;
+        next = (int) (left + ((right - left +1)*(key - arr[left])/(arr[right] - arr[left]))) - 1;
+
+
+
     }
-    if (key == array[next])
+
+    if (key = arr[next])
+
+            return next;
+
+        else return -1;
+
+}
+
+void Insertion_Sort(int array[], int size)
+{
+    int i, j;
+
+    for (i = 1; i < size; i++)
     {
-        printf("To stoixeio %d vrethike sthn thesi %d", key, next);
-        return;
+        int x = array[i];
+        int j = i - 1;
+        while (j >= 0 && x < array[j])
+        {
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = x;
     }
-
-    printf("To stoixeio den vrethike !");
 }
 //===================================================================================================
 int main()
 {
-    int array[10] = {50, 60, 100, 610, 1300, 4000, 7000, 7001, 8000, 10000}, size = 10;
-    // linsearch(array, 4, 5);
-    //Binary_Search(array, 5, 50);
-    //Interpolation_Search(array, size, 1300);
-    Binary_Interpolation_Search(array, size, 50);
+    //=============================================
+    // dhmiourgia pinaka kai tou antigrafou
+     int size = 50000, array[size], index=0;
+    int srchsize = 100000;
+
+    int i,srch[srchsize];
+    for (i = 0; i < size; i++)
+    {
+        array[i] = rand() % 5000 + 1;
+
+    }
+
+    for (i = 0; i < srchsize-1; i++)
+    {
+        srch[i] = rand() % 100 + 1;
+
+    }
+
+
+    //=============================================
+    double time;
+    clock_t start, end;
+
+
+     start = clock();
+
+    for(i=0; i<srchsize; i++)
+    linearSearch(array,0,size,srch[i]);
+    end = clock();
+    time = ((double)(end - start)) / CLK_TCK;
+    printf("Total time of Linear Search execution is %lf\n", time);
+  //=======================================================
+
+    Insertion_Sort(array,size);
+      start = clock();
+
+
+     for(i=0; i<srchsize-1; i++)
+        bisSearch1(array,1,size,srch[i]);
+
+    end = clock();
+    time = ((double)(end - start)) / CLK_TCK;
+    printf("Total time of BIS1 execution is %lf\n", time);
+//==========================================================
+      Insertion_Sort(array,size);
+      start = clock();
+
+
+     for(i=0; i<srchsize-1; i++)
+        bisSearch2(array,1,size,srch[i]);
+
+    end = clock();
+    time = ((double)(end - start)) / CLK_TCK;
+    printf("Total time of BIS2 execution is %lf\n", time);
+
+//===========================================================
+
+    Insertion_Sort(array,size);
+    start = clock();
+
+     for(i=0; i<srchsize; i++)
+    Binary_Search(array, size, srch[i]);
+
+    end = clock();
+    time = ((double)(end - start)) / CLK_TCK;
+    printf("Total time of Binary Search execution is %lf\n", time);
+
+    start = clock();
+
+    for(i=0; i<srchsize; i++)
+    Interpolation_Search(array,size ,srch[i]);
+
+    end = clock();
+    time = ((double)(end - start)) / CLK_TCK;
+    printf("Total time of Interpolation Search execution is %lf\n", time);
+
+
 
     return 0;
 }
